@@ -1,0 +1,14 @@
+"""
+
+
+"""
+
+from tkinter import *
+from MenuManager import MenuManager
+
+root = Tk()
+root.minsize(1080, 720)
+
+mm = MenuManager(root)
+
+root.mainloop()
