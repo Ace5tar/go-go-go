@@ -6,6 +6,8 @@ MM/DD/YY
 """
 
 from tkinter import *
+from GridCanavs import GridCanvas
+from JsonParser import JsonParser
 
 
 class MenuManager:
@@ -34,16 +36,27 @@ class MainMenu(Frame):
 class SizeSelection(Frame):
 
     def __init__(self, manager, root):
+        self.manager = manager
         super().__init__(root)
         Label(self, text="Size Selection").pack()
-        Button(self, text="Continue", command=lambda: manager.setMenu(MainGameplay)).pack()
+        Button(self, text="9x9", command=lambda: self.selectSize(9)).pack()
+        Button(self, text="13x13", command=lambda: self.selectSize(13)).pack()
+        Button(self, text="17x17", command=lambda: self.selectSize(17)).pack()
         Button(self, text="Back", command=lambda: manager.setMenu(MainMenu)).pack()    
+
+    def selectSize(self, size):
+        gameData = JsonParser("GameData.json")
+        gameData["boardSize"] = size
+        self.manager.setMenu(MainGameplay)
 
 
 
 class MainGameplay(Frame):
 
     def __init__(self, manager, root):
+        gameData = JsonParser("GameData.json")
         super().__init__(root)
-        Label(self, text="Main Gameplay").pack()    
+        Label(self, text="Main Gameplay").pack() 
+        gc = GridCanvas(self, (400, 400), gameData['boardSize'])
+        gc.pack()
         Button(self, text="Back", command=lambda: manager.setMenu(SizeSelection)).pack()
