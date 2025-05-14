@@ -7,9 +7,13 @@ MM/DD/YY
 
 from tkinter import *
 from MenuManager import MenuManager
+from PlayBoard import PlayBoard
 
 root = Tk()
 root.minsize(1080, 720)
+
+pb = PlayBoard(9)
+print(pb)
 
 mm = MenuManager(root)
 
