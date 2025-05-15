@@ -30,7 +30,7 @@ class MainMenu(Frame):
 
     def __init__(self, manager, root):
         super().__init__(root)
-        Label(self, text="Main Menu").pack()
+        Label(self, text="GO! GO! GO!").pack()
         Button(self, text="Play", command=lambda: manager.setMenu(SizeSelection)).pack()
 
 class SizeSelection(Frame):
@@ -41,7 +41,7 @@ class SizeSelection(Frame):
         Label(self, text="Size Selection").pack()
         Button(self, text="9x9", command=lambda: self.selectSize(9)).pack()
         Button(self, text="13x13", command=lambda: self.selectSize(13)).pack()
-        Button(self, text="17x17", command=lambda: self.selectSize(17)).pack()
+        Button(self, text="19x19", command=lambda: self.selectSize(19)).pack()
         Button(self, text="Back", command=lambda: manager.setMenu(MainMenu)).pack()    
 
     def selectSize(self, size):
