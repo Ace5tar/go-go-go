@@ -5,16 +5,40 @@ MM/DD/YY
 --Sources--
 """
 
+from JsonParser import JsonParser
+from random import choice
+
+
 class PlayBoard(list):
     
-    def __init__(self, boardSize):
-        self.whiteCaptures = 0
-        self.blackCaptures = 0
-        self.board = [[Cell() for i in range(boardSize)] for j in range(boardSize)]
+    def __init__(self):
+        self.gameData = JsonParser("GameData.json")
+        self.boardSize = self.gameData["boardSize"]
+        self.whiteCaptures = self.gameData["whiteCaptures"]
+        self.blackCaptures = self.gameData["blackCaptures"]
+        self.board = [[Cell() for i in range(self.boardSize)] for j in range(self.boardSize)]
 
     def __repr__(self):
         return '\n'.join([' '.join([cell.value for cell in row]) for row in self.board])
+    
+    # for testing board display
+    def randomizeBoard(self):
+        for cellrow in self.board:
+            for cell in cellrow:
+                cell.value = choice(['e', 'w', 'b'])
+    
+    def getCell(self, cellPos):
+        return self.board[cellPos[0]][cellPos[1]]
 
+    def playMove(self, cellPos):
+        if not self.isLegal(cellPos):
+            return False
+        self.getCell(cellPos).value = self.gameData["currentTurn"] 
+        self.gameData["currentTurn"] = 'b' if self.gameData["currentTurn"] == 'w' else 'w'
+        return True
+        
+    def isLegal(self, event):
+        return True
 
 class Cell:
 

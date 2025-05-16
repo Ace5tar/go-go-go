@@ -8,6 +8,7 @@ MM/DD/YY
 from tkinter import *
 from GridCanavs import GridCanvas
 from JsonParser import JsonParser
+from PlayBoard import PlayBoard
 
 
 class MenuManager:
@@ -54,9 +55,28 @@ class SizeSelection(Frame):
 class MainGameplay(Frame):
 
     def __init__(self, manager, root):
-        gameData = JsonParser("GameData.json")
         super().__init__(root)
         Label(self, text="Main Gameplay").pack() 
-        gc = GridCanvas(self, (400, 400), gameData['boardSize'])
-        gc.pack()
+        self.pb = PlayBoard()
+        self.gc = GridCanvas(self, (400, 400))
+        self.gc.pack()
+        self.gc.drawBoard(self.pb)
+        self.gc.bind('<Button-1>', self.playMove)
+        self.gc.bind('<Motion>', self.previewMove)
+        Button(self, text="Randomize Board", command=self.randomizeBoard).pack() # for testing board display
         Button(self, text="Back", command=lambda: manager.setMenu(SizeSelection)).pack()
+
+    def previewMove(self, event):
+        cellPos = self.gc.canvasToCellPos((event.x, event.y))
+        if self.pb.getCell(cellPos).value == 'e':
+            self.gc.ghostStone(cellPos)
+
+
+    def playMove(self, event):
+        legalMove = self.pb.playMove(self.gc.canvasToCellPos((event.x, event.y)))
+        if legalMove: self.gc.drawBoard(self.pb)
+        
+
+    def randomizeBoard(self):
+        self.pb.randomizeBoard()
+        self.gc.drawBoard(self.pb)

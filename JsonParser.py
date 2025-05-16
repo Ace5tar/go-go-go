@@ -14,8 +14,6 @@ class JsonParser(dict):
         self.fileName = file
         fileObj = open(file, 'r')
         self = json.loads(fileObj.read())
-        
-
         fileObj.close()
         
 
