@@ -1,4 +1,6 @@
 {
-    "boardSize": 17,
-    "whiteCaptures": 0
+    "boardSize": 9,
+    "whiteCaptures": 0,
+    "blackCaptures": 0,
+    "currentTurn": "w"
 }
