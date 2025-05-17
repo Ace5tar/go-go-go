@@ -19,10 +19,10 @@ class MenuManager:
         self.curMenu = None
         self.setMenu(MainMenu)
 
-
     def setMenu(self, menu):
         newMenu = menu(self, self.root)
-        if self.curMenu != None: self.curMenu.destroy()
+        if self.curMenu != None:
+            self.curMenu.destroy()
         self.curMenu = newMenu
         self.curMenu.pack()
 
@@ -34,6 +34,7 @@ class MainMenu(Frame):
         Label(self, text="GO! GO! GO!").pack()
         Button(self, text="Play", command=lambda: manager.setMenu(SizeSelection)).pack()
 
+
 class SizeSelection(Frame):
 
     def __init__(self, manager, root):
@@ -43,7 +44,7 @@ class SizeSelection(Frame):
         Button(self, text="9x9", command=lambda: self.selectSize(9)).pack()
         Button(self, text="13x13", command=lambda: self.selectSize(13)).pack()
         Button(self, text="19x19", command=lambda: self.selectSize(19)).pack()
-        Button(self, text="Back", command=lambda: manager.setMenu(MainMenu)).pack()    
+        Button(self, text="Back", command=lambda: manager.setMenu(MainMenu)).pack()
 
     def selectSize(self, size):
         gameData = JsonParser("GameData.json")
@@ -51,31 +52,37 @@ class SizeSelection(Frame):
         self.manager.setMenu(MainGameplay)
 
 
-
 class MainGameplay(Frame):
 
     def __init__(self, manager, root):
         super().__init__(root)
-        Label(self, text="Main Gameplay").pack() 
+        Label(self, text="Main Gameplay").pack()
         self.pb = PlayBoard()
         self.gc = GridCanvas(self, (400, 400))
         self.gc.pack()
         self.gc.drawBoard(self.pb)
-        self.gc.bind('<Button-1>', self.playMove)
-        self.gc.bind('<Motion>', self.previewMove)
-        Button(self, text="Randomize Board", command=self.randomizeBoard).pack() # for testing board display
+        self.gc.bind("<Button-1>", self.playMove)
+        self.gc.bind("<Motion>", self.previewMove)
+        Button(
+            self, text="Randomize Board", command=self.randomizeBoard
+        ).pack()  # for testing board display
         Button(self, text="Back", command=lambda: manager.setMenu(SizeSelection)).pack()
 
     def previewMove(self, event):
         cellPos = self.gc.canvasToCellPos((event.x, event.y))
-        if self.pb.getCell(cellPos).value == 'e':
+        try:
+            cellValue = self.pb.getCell(cellPos).value
+        except:
+            cellValue = None
+        if cellValue == "e":
             self.gc.ghostStone(cellPos)
-
+        else:
+            self.gc.ghostStone(None)
 
     def playMove(self, event):
         legalMove = self.pb.playMove(self.gc.canvasToCellPos((event.x, event.y)))
-        if legalMove: self.gc.drawBoard(self.pb)
-        
+        if legalMove:
+            self.gc.drawBoard(self.pb)
 
     def randomizeBoard(self):
         self.pb.randomizeBoard()
