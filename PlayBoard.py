@@ -36,7 +36,7 @@ class PlayBoard(list):
             return None
 
     def playMove(self, cellPos):
-        if not self.isLegal(cellPos):
+        if not self.isLegal(cellPos) or self.getCell(cellPos) == None:
             return False
         self.getCell(cellPos).value = self.gameData["currentTurn"]
         self.gameData["currentTurn"] = (
@@ -44,7 +44,7 @@ class PlayBoard(list):
         )
         return True
 
-    def isLegal(self, event):
+    def isLegal(self, cellPos):
         return True
 
 
