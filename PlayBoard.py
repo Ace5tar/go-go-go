@@ -7,6 +7,8 @@ MM/DD/YY
 
 from JsonParser import JsonParser
 from random import choice
+from copy import deepcopy
+from CheckMove import CheckMove
 
 
 class PlayBoard(list):
@@ -19,6 +21,7 @@ class PlayBoard(list):
         self.board = [
             [Cell() for i in range(self.boardSize)] for j in range(self.boardSize)
         ]
+        self.oldBoardStates = []
 
     def __repr__(self):
         return "\n".join([" ".join([cell.value for cell in row]) for row in self.board])
@@ -38,14 +41,24 @@ class PlayBoard(list):
     def playMove(self, cellPos):
         if not self.isLegal(cellPos) or self.getCell(cellPos) == None:
             return False
-        self.getCell(cellPos).value = self.gameData["currentTurn"]
         self.gameData["currentTurn"] = (
             "b" if self.gameData["currentTurn"] == "w" else "w"
         )
+        self.oldBoardStates.append(self.board)
         return True
 
     def isLegal(self, cellPos):
-        return True
+        newBoard = deepcopy(self.board)
+        if self.getCell(cellPos).value == "e":
+            newBoard[cellPos[0]][cellPos[1]].value = self.gameData["currentTurn"]
+            boardState = CheckMove(newBoard)
+            if boardState not in self.oldBoardStates:
+                self.board = deepcopy(boardState.newBoard)
+                return True
+            else:
+                return False
+        else:
+            return False
 
 
 class Cell:
@@ -55,4 +68,4 @@ class Cell:
         self.animationState = 0
 
     def __repr__(self):
-        return self.value
+        return str(self.value)
