@@ -5,10 +5,10 @@ MM/DD/YY
 --Sources--
 """
 
-from JsonParser import JsonParser
+from util.JsonParser import JsonParser
 from random import choice
 from copy import deepcopy
-from CheckMove import CheckMove
+from BoardSim.CheckMove import CheckMove
 
 
 class PlayBoard(list):

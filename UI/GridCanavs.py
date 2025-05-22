@@ -6,8 +6,8 @@ MM/DD/YY
 """
 
 from tkinter import *
-from PlayBoard import PlayBoard
-from JsonParser import JsonParser
+from BoardSim.PlayBoard import PlayBoard
+from util.JsonParser import JsonParser
 from math import floor
 
 

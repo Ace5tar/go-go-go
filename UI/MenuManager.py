@@ -6,9 +6,9 @@ MM/DD/YY
 """
 
 from tkinter import *
-from GridCanavs import GridCanvas
-from JsonParser import JsonParser
-from PlayBoard import PlayBoard
+from UI.GridCanavs import GridCanvas
+from util.JsonParser import JsonParser
+from BoardSim.PlayBoard import PlayBoard
 
 
 class MenuManager:

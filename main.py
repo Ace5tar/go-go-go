@@ -6,8 +6,8 @@ MM/DD/YY
 """
 
 from tkinter import *
-from MenuManager import MenuManager
-from PlayBoard import PlayBoard
+from UI.MenuManager import MenuManager
+from BoardSim.PlayBoard import PlayBoard
 import sys
 
 sys.setrecursionlimit(10000)
