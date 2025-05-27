@@ -2,7 +2,7 @@
 Belle Biery
 MM/DD/YY
 --Description--
---Sources--
+https://stackoverflow.com/questions/13148975/tkinter-label-does-not-show-image
 """
 
 from tkinter import *
@@ -31,7 +31,9 @@ class MainMenu(Frame):
 
     def __init__(self, manager, root):
         super().__init__(root)
-        Label(self, text="GO! GO! GO!").pack()
+        # images must be assigned to instance variable to prevent garbage collection from deleting it
+        self.logo = PhotoImage(file="logo.png")
+        Label(self, image=self.logo).pack()
         Button(self, text="Play", command=lambda: manager.setMenu(SizeSelection)).pack()
 
 
@@ -63,9 +65,6 @@ class MainGameplay(Frame):
         self.gc.drawBoard(self.pb)
         self.gc.bind("<Button-1>", self.playMove)
         self.gc.bind("<Motion>", self.previewMove)
-        Button(
-            self, text="Randomize Board", command=self.randomizeBoard
-        ).pack()  # for testing board display
         Button(self, text="Back", command=lambda: manager.setMenu(SizeSelection)).pack()
 
     def previewMove(self, event):
@@ -83,7 +82,3 @@ class MainGameplay(Frame):
         legalMove = self.pb.playMove(self.gc.canvasToCellPos((event.x, event.y)))
         if legalMove:
             self.gc.drawBoard(self.pb)
-
-    def randomizeBoard(self):
-        self.pb.randomizeBoard()
-        self.gc.drawBoard(self.pb)

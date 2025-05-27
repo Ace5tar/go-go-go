@@ -26,12 +26,6 @@ class PlayBoard(list):
     def __repr__(self):
         return "\n".join([" ".join([cell.value for cell in row]) for row in self.board])
 
-    # for testing board display
-    def randomizeBoard(self):
-        for cellrow in self.board:
-            for cell in cellrow:
-                cell.value = choice(["e", "e", "w", "b"])
-
     def getCell(self, cellPos):
         try:
             return self.board[cellPos[0]][cellPos[1]]
