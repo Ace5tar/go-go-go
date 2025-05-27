@@ -43,6 +43,7 @@ class CheckMove:
                             for c2 in self.similarCells:
                                 self.newBoard[c2[0]][c2[1]].value = "e"
                                 self.captures[self.surroundingColor] += 1
+                                self.scores[self.surroundingColor] += 1
 
     def checkCell(self, cellPos, initCell):
         self.visitedCells.append(cellPos)

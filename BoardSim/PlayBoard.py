@@ -16,8 +16,10 @@ class PlayBoard(list):
     def __init__(self):
         self.gameData = JsonParser("GameData.json")
         self.boardSize = self.gameData["boardSize"]
-        self.whiteCaptures = self.gameData["whiteCaptures"]
-        self.blackCaptures = self.gameData["blackCaptures"]
+        self.whiteCaptures = 0
+        self.blackCaptures = 0
+        self.whiteScore = 0
+        self.blackScore = 0
         self.board = [
             [Cell() for i in range(self.boardSize)] for j in range(self.boardSize)
         ]
@@ -47,6 +49,10 @@ class PlayBoard(list):
             newBoard[cellPos[0]][cellPos[1]].value = self.gameData["currentTurn"]
             boardState = CheckMove(newBoard)
             if boardState not in self.oldBoardStates:
+                self.whiteCaptures += boardState.captures["w"]
+                self.whiteScore = boardState.scores["w"]
+                self.blackCaptures += boardState.captures["b"]
+                self.blackScore = boardState.scores["b"]
                 self.board = deepcopy(boardState.newBoard)
                 return True
             else:

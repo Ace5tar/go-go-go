@@ -65,6 +65,10 @@ class MainGameplay(Frame):
         self.gc.drawBoard(self.pb)
         self.gc.bind("<Button-1>", self.playMove)
         self.gc.bind("<Motion>", self.previewMove)
+        self.whiteScore = Label(self, text="White: 0")
+        self.whiteScore.pack()
+        self.blackScore = Label(self, text="Black: 0")
+        self.blackScore.pack()
         Button(self, text="Back", command=lambda: manager.setMenu(SizeSelection)).pack()
 
     def previewMove(self, event):
@@ -82,3 +86,9 @@ class MainGameplay(Frame):
         legalMove = self.pb.playMove(self.gc.canvasToCellPos((event.x, event.y)))
         if legalMove:
             self.gc.drawBoard(self.pb)
+            self.whiteScore.config(
+                text=f"White: {self.pb.whiteCaptures + self.pb.whiteScore}"
+            )
+            self.blackScore.config(
+                text=f"Black: {self.pb.blackCaptures + self.pb.blackScore}"
+            )
