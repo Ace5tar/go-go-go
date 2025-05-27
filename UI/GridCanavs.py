@@ -6,7 +6,6 @@ MM/DD/YY
 """
 
 from tkinter import *
-from BoardSim.PlayBoard import PlayBoard
 from util.JsonParser import JsonParser
 from math import floor
 
