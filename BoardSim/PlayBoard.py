@@ -15,6 +15,7 @@ class PlayBoard(list):
 
     def __init__(self):
         self.gameData = JsonParser("GameData.json")
+        self.gameData["currentTurn"] = "b"
         self.boardSize = self.gameData["boardSize"]
         self.whiteCaptures = 0
         self.blackCaptures = 0
@@ -53,6 +54,9 @@ class PlayBoard(list):
                 self.whiteScore = boardState.scores["w"]
                 self.blackCaptures += boardState.captures["b"]
                 self.blackScore = boardState.scores["b"]
+                if self.blackScore > (self.boardSize * self.boardSize) / 2:
+                    self.blackScore = 0
+
                 self.board = deepcopy(boardState.newBoard)
                 return True
             else:
