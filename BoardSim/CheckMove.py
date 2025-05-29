@@ -1,15 +1,16 @@
 """
 Belle Biery
-MM/DD/YY
---Description--
---Sources--
+5/29/25
+Takes a board and updates all of the stones that need to be removed
 """
 
 from copy import deepcopy
 
 
+# class to check the results of a certain move if it was made
 class CheckMove:
 
+    # cardinal directions
     directions = [
         (-1, 0),
         (0, -1),
@@ -28,6 +29,7 @@ class CheckMove:
         self.similarCells = []
         self.checkBoard()
 
+    # runs through board positions and runs a flood fill algorithm for each one
     def checkBoard(self):
         for row, r in enumerate(self.board):
             for col, c in enumerate(r):
@@ -45,6 +47,7 @@ class CheckMove:
                                 self.captures[self.surroundingColor] += 1
                                 self.scores[self.surroundingColor] += 1
 
+    # recursive function - checks neighboring cells and if they are the same calls this function again
     def checkCell(self, cellPos, initCell):
         self.visitedCells.append(cellPos)
         if self.getCell(cellPos) == initCell:

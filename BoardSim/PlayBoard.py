@@ -1,8 +1,7 @@
 """
 Belle Biery
-MM/DD/YY
---Description--
---Sources--
+5/29/25
+Simulates a board and contains methods to quickly simulate board interaction
 """
 
 from util.JsonParser import JsonParser
@@ -11,6 +10,7 @@ from copy import deepcopy
 from BoardSim.CheckMove import CheckMove
 
 
+# keeps track of the board state
 class PlayBoard(list):
 
     def __init__(self):
@@ -27,15 +27,18 @@ class PlayBoard(list):
         self.oldBoardStates = []
         self.passed = False
 
+    # represents the board as a grid
     def __repr__(self):
         return "\n".join([" ".join([cell.value for cell in row]) for row in self.board])
 
+    # gets the data at a certain cell
     def getCell(self, cellPos):
         try:
             return self.board[cellPos[0]][cellPos[1]]
         except:
             return None
 
+    # skips turn, and ends game if previous turn was passed
     def passMove(self):
         if self.passed:
             if (
@@ -56,6 +59,7 @@ class PlayBoard(list):
         )
         self.passed = True
 
+    # checks if a play was legal and if it is updates the playboard
     def playMove(self, cellPos):
         self.passed = False
         if not self.isLegal(cellPos) or self.getCell(cellPos) == None:
@@ -66,6 +70,7 @@ class PlayBoard(list):
         self.oldBoardStates.append(self.board)
         return True
 
+    # calls CheckMove and determines new score
     def isLegal(self, cellPos):
         newBoard = deepcopy(self.board)
         if self.getCell(cellPos).value == "e":
@@ -87,11 +92,13 @@ class PlayBoard(list):
             return False
 
 
+# class for each cell
 class Cell:
 
     def __init__(self):
         self.value = "e"
         self.animationState = 0
 
+    # represent cell as the cells value
     def __repr__(self):
         return str(self.value)

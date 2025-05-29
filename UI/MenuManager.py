@@ -1,7 +1,7 @@
 """
 Belle Biery
-MM/DD/YY
---Description--
+5/29/25
+Manage a set of menus and switching between them
 https://stackoverflow.com/questions/13148975/tkinter-label-does-not-show-image
 """
 
@@ -11,14 +11,17 @@ from util.JsonParser import JsonParser
 from BoardSim.PlayBoard import PlayBoard
 
 
+# Manages the UI and menu switching
 class MenuManager:
 
     def __init__(self, root):
         self.root = root
         self.frames = []
         self.curMenu = None
+        # starts on MainMenu
         self.setMenu(MainMenu)
 
+    # sets the menu to menu
     def setMenu(self, menu):
         newMenu = menu(self, self.root)
         if self.curMenu != None:
@@ -27,13 +30,16 @@ class MenuManager:
         self.curMenu.pack()
 
 
+# Main starting menu
 class MainMenu(Frame):
 
     def __init__(self, manager, root):
         super().__init__(root)
         # images must be assigned to instance variable to prevent garbage collection from deleting it
         self.logo = PhotoImage(file="logo.png")
+        # Logo image
         Label(self, image=self.logo).pack()
+        # Start button
         Button(self, text="Play", command=lambda: manager.setMenu(SizeSelection)).pack()
 
 
@@ -48,12 +54,14 @@ class SizeSelection(Frame):
         Button(self, text="19x19", command=lambda: self.selectSize(19)).pack()
         Button(self, text="Back", command=lambda: manager.setMenu(MainMenu)).pack()
 
+    # Updates the selected size
     def selectSize(self, size):
         gameData = JsonParser("GameData.json")
         gameData["boardSize"] = size
         self.manager.setMenu(MainGameplay)
 
 
+# Main gameplay menu
 class MainGameplay(Frame):
 
     def __init__(self, manager, root):
@@ -72,6 +80,7 @@ class MainGameplay(Frame):
         self.blackScore.pack()
         Button(self, text="Pass", command=self.passMove).pack()
 
+    # tells canvas to draw preview stone at the mouse cursor
     def previewMove(self, event):
         cellPos = self.gc.canvasToCellPos((event.x, event.y))
         try:
@@ -83,10 +92,12 @@ class MainGameplay(Frame):
         else:
             self.gc.ghostStone(None)
 
+    # tells playboard to pass
     def passMove(self):
         if self.pb.passMove():
             self.manager.setMenu(GameOver)
 
+    # tells playboard to playmove and then updates the ui
     def playMove(self, event):
         legalMove = self.pb.playMove(self.gc.canvasToCellPos((event.x, event.y)))
         if legalMove:
@@ -99,6 +110,7 @@ class MainGameplay(Frame):
             )
 
 
+# game over screen
 class GameOver(Frame):
 
     def __init__(self, manager, root):

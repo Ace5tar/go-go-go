@@ -1,8 +1,7 @@
 """
 Belle Biery
-MM/DD/YY
---Description--
---Sources--
+5/29/25
+Canvas that allows for drawing the go board
 """
 
 from tkinter import *
@@ -10,6 +9,7 @@ from util.JsonParser import JsonParser
 from math import floor
 
 
+# canvas that draws the grid of stones
 class GridCanvas(Canvas):
 
     def __init__(self, root, size):
@@ -21,6 +21,7 @@ class GridCanvas(Canvas):
         self.create_rectangle(0, 0, self.width, self.height, fill="Tan")
         self.drawGameLines(self.gridSize)
 
+    # draws the lines for the game board
     def drawGameLines(self, numLines):
         lineWidth = self.width / numLines
         lineHeight = self.height / numLines
@@ -53,6 +54,7 @@ class GridCanvas(Canvas):
                     fill="Black",
                 )
 
+    # updates the board
     def drawBoard(self, playBoard):
         stoneSize = 250 / self.gridSize
         for rownum, row in enumerate(playBoard.board):
@@ -71,6 +73,7 @@ class GridCanvas(Canvas):
                         tags=[f"({rownum}, {colnum})"],
                     )
 
+    # converts from a cell position to canvas coords
     def cellToCanvasPos(self, cellPos):
         stonexDist = self.width / self.gridSize
         stoneyDist = self.width / self.gridSize
@@ -78,6 +81,7 @@ class GridCanvas(Canvas):
         ypos = stoneyDist * cellPos[1] + stoneyDist / 2
         return (xpos, ypos)
 
+    # converts from canvas coords to cell position
     def canvasToCellPos(self, canvasPos):
         canvasx = canvasPos[0]
         canvasy = canvasPos[1]
@@ -85,6 +89,7 @@ class GridCanvas(Canvas):
         y = floor((canvasy / self.height) * self.gridSize)
         return (x, y)
 
+    # deletes that last ghost stone and draws a new one
     def ghostStone(self, cellPos):
         self.delete("Ghost")
         if cellPos == None:
@@ -100,6 +105,5 @@ class GridCanvas(Canvas):
             ypos - stoneSize / 2,
             xpos - stoneSize / 2,
             ypos + stoneSize / 2,
-            # fill = "White" if self.gameData['currentTurn'] == 'w' else "Grey",
             tags="Ghost",
         )
