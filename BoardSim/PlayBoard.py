@@ -38,6 +38,10 @@ class PlayBoard(list):
         except:
             return None
 
+    # Gets the board state with strings representing the value of the cells instead of cell objects
+    def getRawBoardState(self, boardState):
+        return [[cell.value for cell in row] for row in boardState]
+
     # skips turn, and ends game if previous turn was passed
     def passMove(self):
         if self.passed:
@@ -67,7 +71,7 @@ class PlayBoard(list):
         self.gameData["currentTurn"] = (
             "b" if self.gameData["currentTurn"] == "w" else "w"
         )
-        self.oldBoardStates.append(self.board)
+        self.oldBoardStates.append(self.getRawBoardState(self.board))
         return True
 
     # calls CheckMove and determines new score
@@ -76,7 +80,7 @@ class PlayBoard(list):
         if self.getCell(cellPos).value == "e":
             newBoard[cellPos[0]][cellPos[1]].value = self.gameData["currentTurn"]
             boardState = CheckMove(newBoard)
-            if boardState not in self.oldBoardStates:
+            if self.getRawBoardState(boardState.newBoard) not in self.oldBoardStates:
                 self.whiteCaptures += boardState.captures["w"]
                 self.whiteScore = boardState.scores["w"]
                 self.blackCaptures += boardState.captures["b"]
