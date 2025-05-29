@@ -59,6 +59,7 @@ class MainGameplay(Frame):
     def __init__(self, manager, root):
         super().__init__(root)
         Label(self, text="Main Gameplay").pack()
+        self.manager = manager
         self.pb = PlayBoard()
         self.gc = GridCanvas(self, (400, 400))
         self.gc.pack()
@@ -69,7 +70,7 @@ class MainGameplay(Frame):
         self.whiteScore.pack()
         self.blackScore = Label(self, text="Black: 0")
         self.blackScore.pack()
-        Button(self, text="Back", command=lambda: manager.setMenu(SizeSelection)).pack()
+        Button(self, text="Pass", command=self.passMove).pack()
 
     def previewMove(self, event):
         cellPos = self.gc.canvasToCellPos((event.x, event.y))
@@ -82,6 +83,10 @@ class MainGameplay(Frame):
         else:
             self.gc.ghostStone(None)
 
+    def passMove(self):
+        if self.pb.passMove():
+            self.manager.setMenu(GameOver)
+
     def playMove(self, event):
         legalMove = self.pb.playMove(self.gc.canvasToCellPos((event.x, event.y)))
         if legalMove:
@@ -92,3 +97,20 @@ class MainGameplay(Frame):
             self.blackScore.config(
                 text=f"Black: {self.pb.blackCaptures + self.pb.blackScore}"
             )
+
+
+class GameOver(Frame):
+
+    def __init__(self, manager, root):
+        winner = JsonParser("GameData.json")["winner"]
+        self.manager = manager
+        super().__init__(root)
+        if winner == "w":
+            Label(self, text="White Wins!").pack()
+        elif winner == "b":
+            Label(self, text="Black Wins!").pack()
+        else:
+            Label(self, text="It's a draw!").pack()
+        Button(
+            self, text="New Game", command=lambda: manager.setMenu(SizeSelection)
+        ).pack()

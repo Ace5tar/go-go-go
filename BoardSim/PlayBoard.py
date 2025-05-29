@@ -35,7 +35,28 @@ class PlayBoard(list):
         except:
             return None
 
+    def passMove(self):
+        if self.passed:
+            if (
+                self.whiteCaptures + self.whiteScore
+                > self.blackCaptures + self.blackScore
+            ):
+                self.gameData["winner"] = "w"
+            elif (
+                self.whiteCaptures + self.whiteScore
+                < self.blackCaptures + self.blackScore
+            ):
+                self.gameData["winner"] = "b"
+            else:
+                self.gameData["winner"] = "d"
+            return "GAMEOVER"
+        self.gameData["currentTurn"] = (
+            "b" if self.gameData["currentTurn"] == "w" else "w"
+        )
+        self.passed = True
+
     def playMove(self, cellPos):
+        self.passed = False
         if not self.isLegal(cellPos) or self.getCell(cellPos) == None:
             return False
         self.gameData["currentTurn"] = (
