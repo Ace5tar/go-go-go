@@ -25,6 +25,7 @@ class PlayBoard(list):
             [Cell() for i in range(self.boardSize)] for j in range(self.boardSize)
         ]
         self.oldBoardStates = []
+        self.passed = False
 
     def __repr__(self):
         return "\n".join([" ".join([cell.value for cell in row]) for row in self.board])
