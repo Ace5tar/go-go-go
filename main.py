@@ -1,8 +1,7 @@
 """
 Belle Biery
 MM/DD/YY
---Description--
---Sources--
+Program that simulates Go
 """
 
 from tkinter import *
